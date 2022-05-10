@@ -21,12 +21,15 @@ if [ -n "${AES_GCM_SELECTCHECK}" ]; then
   (cd proof/AES && go run AES-GCM-check-entrypoint.go)
   return
 fi
+
+export SAW_RTS_FLAGS="-p"
+
 # If |*_SELECTCHECK| env variable does not exist, run quick check of all algorithms.
 (cd proof/SHA512 && go run SHA512-384-check-entrypoint.go)
-saw proof/SHA512/verify-SHA512-512-quickcheck.saw
+saw proof/SHA512/verify-SHA512-512-quickcheck.saw +RTS ${SAW_RTS_FLAGS} -poverify-SHA512-512-quickcheck.saw -RTS
 (cd proof/HMAC && go run HMAC-check-entrypoint.go)
 (cd proof/AES && go run AES-GCM-check-entrypoint.go)
-saw proof/AES_KW/verify-AES_KW.saw
-saw proof/AES_KW/verify-AES_KWP.saw
-saw proof/ECDSA/verify-ECDSA.saw
-saw proof/ECDH/verify-ECDH.saw
+saw proof/AES_KW/verify-AES_KW.saw +RTS ${SAW_RTS_FLAGS} -poverify-AES_KW.saw -RTS
+saw proof/AES_KW/verify-AES_KWP.saw +RTS ${SAW_RTS_FLAGS} -poverify-AES_KWP.saw -RTS
+saw proof/ECDSA/verify-ECDSA.saw +RTS ${SAW_RTS_FLAGS} -poverify-ECDSA.saw -RTS
+saw proof/ECDH/verify-ECDH.saw +RTS ${SAW_RTS_FLAGS} -poverify-ECDH.saw -RTS
