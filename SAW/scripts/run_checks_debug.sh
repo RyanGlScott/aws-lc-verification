@@ -8,6 +8,6 @@ set -ex
 # The RSA proofs currently require the source code to be built with Debug
 # settings in CMake.
 
-export SAW_RTS_FLAGS="-p"
+export SAW_RTS_FLAGS="-l-agu"
 
-saw proof/RSA/verify-RSA.saw +RTS ${SAW_RTS_FLAGS} -poverify-RSA.saw -RTS
+saw proof/RSA/verify-RSA.saw +RTS ${SAW_RTS_FLAGS} -olverify-RSA.saw.eventlog -RTS
