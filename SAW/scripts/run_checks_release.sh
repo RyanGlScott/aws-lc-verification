@@ -22,14 +22,22 @@ if [ -n "${AES_GCM_SELECTCHECK}" ]; then
   return
 fi
 
-export SAW_RTS_FLAGS="-l-agu"
+export SAW_RTS_FLAGS="-hc -L500"
 
 # If |*_SELECTCHECK| env variable does not exist, run quick check of all algorithms.
 (cd proof/SHA512 && go run SHA512-384-check-entrypoint.go)
-saw proof/SHA512/verify-SHA512-512-quickcheck.saw +RTS ${SAW_RTS_FLAGS} -olverify-SHA512-512-quickcheck.saw.eventlog -RTS
+mv proof/SHA512/saw.hp proof/SHA512/verify-SHA512-384-quickcheck.saw.hp
+saw proof/SHA512/verify-SHA512-512-quickcheck.saw +RTS ${SAW_RTS_FLAGS} -RTS
+mv saw.hp verify-SHA512-512-quickcheck.saw.hp
 (cd proof/HMAC && go run HMAC-check-entrypoint.go)
+mv proof/HMAC/saw.hp proof/HMAC/verify-HMAC-SHA384-quickcheck.saw.hp
 (cd proof/AES && go run AES-GCM-check-entrypoint.go)
-saw proof/AES_KW/verify-AES_KW.saw +RTS ${SAW_RTS_FLAGS} -olverify-AES_KW.saw.eventlog -RTS
-saw proof/AES_KW/verify-AES_KWP.saw +RTS ${SAW_RTS_FLAGS} -olverify-AES_KWP.saw.eventlog -RTS
-saw proof/ECDSA/verify-ECDSA.saw +RTS ${SAW_RTS_FLAGS} -olverify-ECDSA.saw.eventlog -RTS
-saw proof/ECDH/verify-ECDH.saw +RTS ${SAW_RTS_FLAGS} -olverify-ECDH.saw.eventlog -RTS
+mv proof/AES/saw.hp proof/AES/verify-AES-GCM-quickcheck.saw.hp
+saw proof/AES_KW/verify-AES_KW.saw +RTS ${SAW_RTS_FLAGS} -RTS
+mv saw.hp verify-AES_KW.saw.hp
+saw proof/AES_KW/verify-AES_KWP.saw +RTS ${SAW_RTS_FLAGS} -RTS
+mv saw.hp verify-AES_KWP.saw.hp
+saw proof/ECDSA/verify-ECDSA.saw +RTS ${SAW_RTS_FLAGS} -RTS
+mv saw.hp verify-ECDSA.saw.hp
+saw proof/ECDH/verify-ECDH.saw +RTS ${SAW_RTS_FLAGS} -RTS
+mv saw.hp verify-ECDH.saw.hp
