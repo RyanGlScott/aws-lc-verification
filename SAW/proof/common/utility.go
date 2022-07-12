@@ -65,7 +65,7 @@ func CreateAndRunSawScript(path_to_template string, placeholder_key string, valu
 // A function to run saw script.
 func RunSelectCheckScript(path_to_saw_file string, path_to_template string) {
 	log.Printf("Running saw script %s. Related template: %s.", path_to_saw_file, path_to_template)
-	cmd := exec.Command("saw", path_to_saw_file, "+RTS", "-hc", "-L500", "-RTS")
+	cmd := exec.Command("saw", path_to_saw_file, "+RTS", "-l", "-hi", "-i0.5", "-RTS")
 	cmd.Stdout = os.Stdout
 	cmd.Stderr = os.Stderr
 	err := cmd.Run()
@@ -78,7 +78,7 @@ func RunSelectCheckScript(path_to_saw_file string, path_to_template string) {
 
 func RunSawScript(path_to_saw_file string) {
 	log.Printf("Running saw script %s.", path_to_saw_file)
-	cmd := exec.Command("saw", path_to_saw_file, "+RTS", "-hc", "-L500", "-RTS")
+	cmd := exec.Command("saw", path_to_saw_file, "+RTS", "-l", "-hi", "-i0.5", "-RTS")
 	cmd.Stdout = os.Stdout
 	cmd.Stderr = os.Stderr
 	err := cmd.Run()

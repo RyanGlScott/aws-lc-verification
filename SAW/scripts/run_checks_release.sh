@@ -22,7 +22,7 @@ if [ -n "${AES_GCM_SELECTCHECK}" ]; then
   return
 fi
 
-export SAW_RTS_FLAGS="-hc -L500"
+export SAW_RTS_FLAGS="-l -hi -i0.5"
 
 # If |*_SELECTCHECK| env variable does not exist, run quick check of all algorithms.
 (cd proof/SHA512 && go run SHA512-384-check-entrypoint.go)
