@@ -9,10 +9,10 @@ import Common::EC::EC_P384
 import EC_primitives
 
 
-type wsize_max = 7
-
 parameter
   type wsize : #
+
+  type wsize_max = 7
 
   type constraint (wsize > 0, wsize <= wsize_max)
   type constraint (bit_length%wsize!=0, bit_length/wsize>1)
@@ -29,7 +29,7 @@ pre_comp_table p = scanl f p [1..(tsize-1)]
     twoP = (point_double p)
     f z i  = (point_add 0 twoP z)
 
-mul_scalar_rwnaf_odd_loop_body : 
+mul_scalar_rwnaf_odd_loop_body :
   scalar -> ([16], scalar)
 mul_scalar_rwnaf_odd_loop_body s = (drop d, s')
   where
@@ -45,7 +45,7 @@ mul_scalar_rwnaf_odd in = out'
     window' = (drop (outls!0).1)
     out' = ((map (\p -> p.0) outls)#[window'])
 
-mul_scalar_rwnaf : scalar -> [(bit_length / wsize) + 1]point_id 
+mul_scalar_rwnaf : scalar -> [(bit_length / wsize) + 1]point_id
 mul_scalar_rwnaf in = mul_scalar_rwnaf_odd (in || 1)
 
 select_point_loop_body : [64] -> point -> [64] -> point -> point
@@ -104,12 +104,6 @@ point_mul_generic p s = r_gen
 // ---------------------------------------------------------------
 // point_mul_base
 
-type ngroups = 4
-type csize = ngroups*wsize
-
-type subtable_size = 2^^(wsize-1)
-type table_size = (bit_length+csize-1)/csize
-
 type nwindows = (bit_length+wsize-1)/wsize
 
 p384_felem_one : felem
@@ -118,6 +112,12 @@ p384_felem_one = [0xffffffff00000001, 0x00000000ffffffff,
                   0x0000000000000000, 0x0000000000000000]
 
 parameter
+  type ngroups = 4
+  type csize = ngroups*wsize
+
+  type subtable_size = 2^^(wsize-1)
+  type table_size = (bit_length+csize-1)/csize
+
   p384_g_pre_comp : [table_size][subtable_size][2]felem
 
 // The following definition is almost the same as the one in EC_primitives.cry
